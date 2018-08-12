@@ -3,8 +3,9 @@
 # dependencies
 /node_modules
 
-# Data
+# Pokemon Data
 /data
+/public/pokemonImg
 
 # testing
 /coverage
