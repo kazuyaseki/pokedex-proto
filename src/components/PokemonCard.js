@@ -7,6 +7,7 @@ const CARD_WIDTH = (window.innerWidth - 55) / 2;
 
 const Card = styled.div`
   position: relative;
+  height: ${CARD_WIDTH}px;
 `;
 
 const Image = styled.div`
