@@ -28,6 +28,7 @@ const PokemonList = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
+  background-color: rgb(194, 8, 25);
 `;
 
 const App = () => (

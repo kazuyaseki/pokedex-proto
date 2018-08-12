@@ -54,5 +54,7 @@ const Label = styled.span`
   line-height: 24px;
 `;
 
-const TypeLabel = ({ type }) => <Label type={type}>{type}</Label>;
+const TypeLabel = ({ type }) => (
+  <Label type={type}>{type.substring(0, 1)}</Label>
+);
 export default TypeLabel;

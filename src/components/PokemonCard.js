@@ -14,6 +14,7 @@ const Image = styled.div`
   width: ${CARD_WIDTH}px;
   height: ${CARD_WIDTH * (2 / 3)}px;
   border-radius: 8px;
+  background-color: #fff;
   background-image: url(${props => props.src});
   background-position: center;
   background-size: contain;
@@ -26,24 +27,31 @@ const Detail = styled.div`
   padding: 5px 8px;
   display: flex;
   justify-content: space-between;
+  color: #fff;
 `;
 
 const IdLabel = styled.span`
   position: absolute;
+  top: 5px;
   left: 5px;
-  font-size: 12px;
+  padding: 2px 3px;
+  color: #888;
+  font-size: 10px;
   font-weight: bold;
+  border: 1px solid rgba(0, 0, 0, 0.24);
+  border-radius: 8px;
+`;
+
+const PokemonFontText = styled.span`
+  font-family: 'pokemon';
 `;
 
 const PokemonCard = ({ pokemon }) => (
   <Card>
-    <IdLabel>
-      No.
-      {pokemon.id}
-    </IdLabel>
+    <IdLabel>{pokemon.id}</IdLabel>
     <Image src={`/pokemonImg/${pokemon.id + pokemon.ename}.png`} />
     <Detail>
-      {pokemon.jname}
+      <PokemonFontText>{pokemon.jname || pokemon.ename}</PokemonFontText>
       <div>
         {pokemon.type.map(t => (
           <TypeLabel type={t} />
