@@ -64,14 +64,22 @@ const typeDefs = gql`
   }
 
   type Query {
-    pokemons: [Pokemon]
+    pokemons(cursor: Int): [Pokemon]
     pokemon(id: ID): Pokemon
   }
 `;
 
+const COUNT_PER_PAGE = 10;
+
 const resolvers = {
   Query: {
-    pokemons: () => pokemons,
+    pokemons(_, args) {
+      if (Number.isInteger(args.cursor)) {
+        return pokemons.slice(args.cursor, args.cursor + COUNT_PER_PAGE);
+      }
+
+      return pokemons;
+    },
     pokemon(root, args, context, info) {
       return pokemons.find(pokemon => Number(pokemon.id) == args.id);
     }
