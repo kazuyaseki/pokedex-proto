@@ -3,12 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "apollo-boost": "^0.1.13",
     "apollo-server": "^2.0.0",
     "graphql": "^0.13.2",
+    "graphql-tag": "^2.9.2",
     "node-json-db": "^0.7.5",
     "react": "^16.4.2",
+    "react-apollo": "^2.1.11",
     "react-dom": "^16.4.2",
-    "react-scripts": "1.1.4"
+    "react-scripts": "1.1.4",
+    "styled-components": "^3.4.2"
   },
   "scripts": {
     "start": "react-scripts start",
