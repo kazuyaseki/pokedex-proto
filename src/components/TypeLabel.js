@@ -54,7 +54,9 @@ const Label = styled.span`
   line-height: 24px;
 `;
 
-const TypeLabel = ({ type }) => (
-  <Label type={type}>{type.substring(0, 1)}</Label>
+const TypeLabel = ({ type, onClick }) => (
+  <Label type={type} onClick={() => onClick()}>
+    {type.substring(0, 1)}
+  </Label>
 );
 export default TypeLabel;

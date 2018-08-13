@@ -1,6 +1,7 @@
 const { ApolloServer, gql } = require('apollo-server');
 
 const pokemons = require('../data/Pokemon-DB/pokedex.json');
+const types = require('../data/Pokemon-DB/types.json');
 
 const convertBaseObject = original => ({
   attack: original.Attack,
@@ -64,8 +65,9 @@ const typeDefs = gql`
   }
 
   type Query {
-    pokemons(cursor: Int): [Pokemon]
+    pokemons(cursor: Int, filterType: String): [Pokemon]
     pokemon(id: ID): Pokemon
+    types: [Type]
   }
 `;
 
@@ -74,6 +76,11 @@ const COUNT_PER_PAGE = 10;
 const resolvers = {
   Query: {
     pokemons(_, args) {
+      if (args.filterType) {
+        return pokemons.filter(pokemon =>
+          pokemon.type.includes(args.filterType)
+        );
+      }
       if (Number.isInteger(args.cursor)) {
         return pokemons.slice(args.cursor, args.cursor + COUNT_PER_PAGE);
       }
@@ -82,6 +89,9 @@ const resolvers = {
     },
     pokemon(root, args, context, info) {
       return pokemons.find(pokemon => Number(pokemon.id) == args.id);
+    },
+    types() {
+      return types;
     }
   },
   Pokemon: {

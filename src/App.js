@@ -2,11 +2,14 @@ import React from 'react';
 import styled from 'styled-components';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
+import { compose, withState } from 'recompose';
+import TypeLabel from './components/TypeLabel';
+
 import PokemonCard from './components/PokemonCard';
 
 const query = gql`
-  {
-    pokemons(cursor: 0) {
+  query pokemons($cursor: Int, $filterType: String) {
+    pokemons(cursor: $cursor, filterType: $filterType) {
       id
       jname
       ename
@@ -20,27 +23,43 @@ const query = gql`
       }
       type
     }
+    types {
+      jname
+      cname
+    }
   }
 `;
 
-const App = () => (
-  <div>
-    <Header>
-      <SearchBox />
-    </Header>
-    <PokemonList>
-      <Query query={query}>
-        {({ loading, data }) => {
-          if (loading) return <p>Loading...</p>;
+const enhanceTypeFilter = withState('filterType', 'setFilterType', '');
+const App = enhanceTypeFilter(({ filterType, setFilterType }) => (
+  <Query query={query} variables={{ cursor: 0, filterType }}>
+    {({ loading, data }) => {
+      if (loading) return <p>Loading...</p>;
 
-          return data.pokemons.map(pokemon => (
-            <PokemonCard pokemon={pokemon} key={pokemon.id} />
-          ));
-        }}
-      </Query>
-    </PokemonList>
-  </div>
-);
+      return (
+        <div>
+          <Header>
+            <WithStateSearchBox />
+            {data.types.map(type => (
+              <TypeLabel
+                type={type.cname}
+                onClick={() => {
+                  console.log(type);
+                  setFilterType(t => (t = type.cname));
+                }}
+              />
+            ))}
+          </Header>
+          <PokemonList>
+            {data.pokemons.map(pokemon => (
+              <PokemonCard pokemon={pokemon} key={pokemon.id} />
+            ))}
+          </PokemonList>
+        </div>
+      );
+    }}
+  </Query>
+));
 
 const Header = styled.header`
   width: 100vw;
@@ -71,6 +90,12 @@ const SearchBox = styled.input`
   background-repeat: no-repeat;
   background-position: 5px center;
 `;
+
+const enhance = withState('searchText', 'setText', '');
+const filterState = withState('filterText', 'setFilterText', '');
+const WithStateSearchBox = enhance(({ searchText, setText }) => (
+  <SearchBox value={searchText} onChange={e => setText(e.target.value)} />
+));
 
 const PokemonList = styled.div`
   padding: 20px;
