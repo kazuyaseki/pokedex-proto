@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 import { compose, withState } from 'recompose';
+import LoadingScreen from './components/LoadingScreen';
 import TypeLabel from './components/TypeLabel';
 
 import PokemonCard from './components/PokemonCard';
@@ -34,7 +35,7 @@ const enhanceTypeFilter = withState('filterType', 'setFilterType', '');
 const App = enhanceTypeFilter(({ filterType, setFilterType }) => (
   <Query query={query} variables={{ cursor: 0, filterType }}>
     {({ loading, data }) => {
-      if (loading) return <p>Loading...</p>;
+      if (loading) return <LoadingScreen />;
 
       return (
         <div>
