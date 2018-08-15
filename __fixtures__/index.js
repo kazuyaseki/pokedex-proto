@@ -1,6 +1,7 @@
 import PokemonCard from '../src/components/PokemonCard';
 import TypeLabel from '../src/components/TypeLabel';
 import LoadingScreen from '../src/components/LoadingScreen';
+import FavButton from '../src/components/FavButton';
 
 import { pokemon } from '../data/sampleData/data';
 
@@ -22,5 +23,13 @@ export default [
   {
     component: LoadingScreen,
     name: 'モンボ'
+  },
+  {
+    component: FavButton,
+    name: 'お気に入り',
+    props: {
+      isFaved: false,
+      handleFavorite: () => {}
+    }
   }
 ];
