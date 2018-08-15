@@ -31,7 +31,15 @@ const query = gql`
   }
 `;
 
+const dummyFavedPokemonIds = ['001'];
+
 const enhanceTypeFilter = withState('filterType', 'setFilterType', '');
+const enhanceFavedPokemonIds = withState(
+  'favedPokemonIds',
+  'setFavedPokemonIds',
+  ['001']
+);
+
 const App = enhanceTypeFilter(({ filterType, setFilterType }) => (
   <Query query={query} variables={{ cursor: 0, filterType }}>
     {({ loading, data }) => {
@@ -44,18 +52,11 @@ const App = enhanceTypeFilter(({ filterType, setFilterType }) => (
             {data.types.map(type => (
               <TypeLabel
                 type={type.cname}
-                onClick={() => {
-                  console.log(type);
-                  setFilterType(t => (t = type.cname));
-                }}
+                onClick={() => setFilterType(t => (t = type.cname))}
               />
             ))}
           </Header>
-          <PokemonList>
-            {data.pokemons.map(pokemon => (
-              <PokemonCard pokemon={pokemon} key={pokemon.id} />
-            ))}
-          </PokemonList>
+          <EnhancedPokemonList pokemons={data.pokemons} />
         </div>
       );
     }}
@@ -93,7 +94,6 @@ const SearchBox = styled.input`
 `;
 
 const enhance = withState('searchText', 'setText', '');
-const filterState = withState('filterText', 'setFilterText', '');
 const WithStateSearchBox = enhance(({ searchText, setText }) => (
   <SearchBox value={searchText} onChange={e => setText(e.target.value)} />
 ));
@@ -105,5 +105,28 @@ const PokemonList = styled.div`
   justify-content: space-between;
   background-color: rgb(194, 8, 25);
 `;
+
+const EnhancedPokemonList = enhanceFavedPokemonIds(
+  ({ favedPokemonIds, setFavedPokemonIds, pokemons }) => (
+    <PokemonList>
+      {pokemons.map(pokemon => (
+        <PokemonCard
+          pokemon={pokemon}
+          key={pokemon.id}
+          isFaved={favedPokemonIds.includes(pokemon.id)}
+          handleFavorite={id => {
+            setFavedPokemonIds(ids => {
+              if (!ids.includes(id)) {
+                return [...ids, id];
+              } else {
+                return ids.filter(_id => _id !== id);
+              }
+            });
+          }}
+        />
+      ))}
+    </PokemonList>
+  )
+);
 
 export default App;

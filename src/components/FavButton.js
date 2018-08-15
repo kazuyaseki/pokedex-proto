@@ -17,7 +17,7 @@ const fragments = () => {
 };
 
 const FavButton = ({ isFaved, handleFavorite }) => (
-  <StyledFavButton onTouchTap={() => handleFavorite()}>
+  <StyledFavButton onClick={() => handleFavorite()}>
     <FavoriteEffect deg={Math.floor(Math.random() * 180)}>
       <FavedEffectWrapper isFaved={isFaved}>{fragments()}</FavedEffectWrapper>
     </FavoriteEffect>

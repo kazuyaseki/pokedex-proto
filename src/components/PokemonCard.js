@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import TypeLabel from './TypeLabel';
+import FavButton from './FavButton';
 
 const CARD_WIDTH = (window.innerWidth - 55) / 2;
 
@@ -46,9 +47,21 @@ const PokemonFontText = styled.span`
   font-family: 'pokemon';
 `;
 
-const PokemonCard = ({ pokemon }) => (
+const FavButtonWrapper = styled.div`
+  position: absolute;
+  top: -6px;
+  right: -3px;
+`;
+
+const PokemonCard = ({ pokemon, isFaved, handleFavorite }) => (
   <Card>
     <IdLabel>{pokemon.id}</IdLabel>
+    <FavButtonWrapper>
+      <FavButton
+        isFaved={isFaved}
+        handleFavorite={() => handleFavorite(pokemon.id)}
+      />
+    </FavButtonWrapper>
     <Image src={`/pokemonImg/${pokemon.id + pokemon.ename}.png`} />
     <Detail>
       <PokemonFontText>{pokemon.jname || pokemon.ename}</PokemonFontText>
