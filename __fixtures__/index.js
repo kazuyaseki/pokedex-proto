@@ -1,4 +1,5 @@
 import PokemonCard from '../src/components/PokemonCard';
+import PokemonDetail from '../src/components/PokemonDetail';
 import TypeLabel from '../src/components/TypeLabel';
 import LoadingScreen from '../src/components/LoadingScreen';
 import FavButton from '../src/components/FavButton';
@@ -9,6 +10,13 @@ export default [
   {
     component: PokemonCard,
     name: 'ポケモンカード',
+    props: {
+      pokemon
+    }
+  },
+  {
+    component: PokemonDetail,
+    name: 'ポケモン詳細',
     props: {
       pokemon
     }
