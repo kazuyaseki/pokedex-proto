@@ -1,11 +1,13 @@
 import React from 'react';
+import { BrowserRouter, Route, Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { Query, Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
 import { compose, withState } from 'recompose';
+
+import PokemonDetailPage from './components/PokemonDetailPage';
 import LoadingScreen from './components/LoadingScreen';
 import TypeLabel from './components/TypeLabel';
-
 import PokemonCard from './components/PokemonCard';
 
 const query = gql`
@@ -38,7 +40,7 @@ const enhanceFavedPokemonIds = withState(
   ['001']
 );
 
-const App = enhanceTypeFilter(({ filterType, setFilterType }) => (
+const Wholesome = enhanceTypeFilter(({ filterType, setFilterType }) => (
   <Query query={query} variables={{ cursor: 0, filterType }}>
     {({ loading, data }) => {
       if (loading) return <LoadingScreen />;
@@ -60,6 +62,15 @@ const App = enhanceTypeFilter(({ filterType, setFilterType }) => (
     }}
   </Query>
 ));
+
+const App = () => (
+  <BrowserRouter>
+    <div>
+      <Route exact path="/" component={Wholesome} />
+      <Route path="/detail/:id" component={PokemonDetailPage} />
+    </div>
+  </BrowserRouter>
+);
 
 const Header = styled.header`
   width: 100vw;
