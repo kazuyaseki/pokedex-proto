@@ -4,12 +4,47 @@ import './index.css';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 
-import ApolloClient from 'apollo-boost';
+import ApolloClient, { InMemoryCache, gql } from 'apollo-boost';
 import { ApolloProvider } from 'react-apollo';
-import gql from 'graphql-tag';
+
+const cache = new InMemoryCache();
+
+const GET_FAVED_POKEMON_IDS = gql`
+  query {
+    favedPokemonIds @client
+  }
+`;
+
+const favPokemon = (_, { id }, { cache }) => {
+  let { favedPokemonIds } = cache.readQuery({
+    query: GET_FAVED_POKEMON_IDS
+  });
+
+  favedPokemonIds = favedPokemonIds.includes(id)
+    ? favedPokemonIds.filter(itemId => itemId !== id)
+    : favedPokemonIds.concat(id);
+
+  cache.writeQuery({
+    query: GET_FAVED_POKEMON_IDS,
+    data: { favedPokemonIds }
+  });
+
+  return { id };
+};
 
 const client = new ApolloClient({
-  uri: 'http://localhost:4000'
+  cache,
+  uri: 'http://localhost:4000',
+  clientState: {
+    defaults: {
+      favedPokemonIds: []
+    },
+    resolvers: {
+      Mutation: {
+        favPokemon
+      }
+    }
+  }
 });
 
 ReactDOM.render(

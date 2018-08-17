@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Query } from 'react-apollo';
+import { Query, Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
 import { compose, withState } from 'recompose';
 import LoadingScreen from './components/LoadingScreen';
@@ -31,8 +31,6 @@ const query = gql`
   }
 `;
 
-const dummyFavedPokemonIds = ['001'];
-
 const enhanceTypeFilter = withState('filterType', 'setFilterType', '');
 const enhanceFavedPokemonIds = withState(
   'favedPokemonIds',
@@ -56,7 +54,7 @@ const App = enhanceTypeFilter(({ filterType, setFilterType }) => (
               />
             ))}
           </Header>
-          <EnhancedPokemonList pokemons={data.pokemons} />
+          <DummyPokemonList pokemons={data.pokemons} />
         </div>
       );
     }}
@@ -105,6 +103,47 @@ const PokemonList = styled.div`
   justify-content: space-between;
   background-color: rgb(194, 8, 25);
 `;
+
+const GET_FAVED_POKEMON_IDS = gql`
+  query {
+    favedPokemonIds @client
+  }
+`;
+
+const TOGGLE_FAV_POKEMON = gql`
+  mutation($id: ID!) {
+    favPokemon(id: $id) @client {
+      id
+    }
+  }
+`;
+
+const DummyPokemonList = ({ pokemons }) => (
+  <Query query={GET_FAVED_POKEMON_IDS}>
+    {({ loading, data }) => {
+      if (loading) return <p>Loading...</p>;
+
+      return (
+        <Mutation mutation={TOGGLE_FAV_POKEMON}>
+          {(toggleFavoritePokemon, result) => (
+            <PokemonList>
+              {pokemons.map(pokemon => (
+                <PokemonCard
+                  pokemon={pokemon}
+                  key={pokemon.id}
+                  isFaved={data.favedPokemonIds.includes(pokemon.id)}
+                  handleFavorite={id =>
+                    toggleFavoritePokemon({ variables: { id } })
+                  }
+                />
+              ))}
+            </PokemonList>
+          )}
+        </Mutation>
+      );
+    }}
+  </Query>
+);
 
 const EnhancedPokemonList = enhanceFavedPokemonIds(
   ({ favedPokemonIds, setFavedPokemonIds, pokemons }) => (
