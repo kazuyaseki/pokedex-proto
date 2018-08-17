@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 import TypeLabel from './TypeLabel';
@@ -54,23 +55,25 @@ const FavButtonWrapper = styled.div`
 `;
 
 const PokemonCard = ({ pokemon, isFaved, handleFavorite }) => (
-  <Card>
-    <IdLabel>{pokemon.id}</IdLabel>
-    <FavButtonWrapper>
-      <FavButton
-        isFaved={isFaved}
-        handleFavorite={() => handleFavorite(pokemon.id)}
-      />
-    </FavButtonWrapper>
-    <Image src={`/pokemonImg/${pokemon.id + pokemon.ename}.png`} />
-    <Detail>
-      <PokemonFontText>{pokemon.jname || pokemon.ename}</PokemonFontText>
-      <div>
-        {pokemon.type.map(t => (
-          <TypeLabel type={t} />
-        ))}
-      </div>
-    </Detail>
-  </Card>
+  <Link to={`/detail/${pokemon.id}`}>
+    <Card>
+      <IdLabel>{pokemon.id}</IdLabel>
+      <FavButtonWrapper>
+        <FavButton
+          isFaved={isFaved}
+          handleFavorite={() => handleFavorite(pokemon.id)}
+        />
+      </FavButtonWrapper>
+      <Image src={`/pokemonImg/${pokemon.id + pokemon.ename}.png`} />
+      <Detail>
+        <PokemonFontText>{pokemon.jname || pokemon.ename}</PokemonFontText>
+        <div>
+          {pokemon.type.map(t => (
+            <TypeLabel type={t} />
+          ))}
+        </div>
+      </Detail>
+    </Card>
+  </Link>
 );
 export default PokemonCard;
