@@ -8,7 +8,7 @@ import { compose, withState } from 'recompose';
 import PokemonDetailPage from './components/PokemonDetailPage';
 import LoadingScreen from './components/LoadingScreen';
 import TypeLabel from './components/TypeLabel';
-import PokemonCard from './components/PokemonCard';
+import PokemonList from './components/PokemonList';
 
 const query = gql`
   query pokemons($offset: Int, $limit: Int, $filterType: String) {
@@ -131,14 +131,6 @@ const WithStateSearchBox = enhance(({ searchText, setText }) => (
   <SearchBox value={searchText} onChange={e => setText(e.target.value)} />
 ));
 
-const PokemonList = styled.div`
-  padding: 20px;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  background-color: rgb(194, 8, 25);
-`;
-
 const GET_FAVED_POKEMON_IDS = gql`
   query {
     favedPokemonIds @client
@@ -161,18 +153,11 @@ const EnhancedPokemonList = ({ pokemons }) => (
       return (
         <Mutation mutation={TOGGLE_FAV_POKEMON}>
           {(toggleFavoritePokemon, result) => (
-            <PokemonList>
-              {pokemons.map(pokemon => (
-                <PokemonCard
-                  pokemon={pokemon}
-                  key={pokemon.id}
-                  isFaved={data.favedPokemonIds.includes(pokemon.id)}
-                  handleFavorite={id =>
-                    toggleFavoritePokemon({ variables: { id } })
-                  }
-                />
-              ))}
-            </PokemonList>
+            <PokemonList
+              pokemons={pokemons}
+              favedPokemonIds={data.favedPokemonIds}
+              toggleFavoritePokemon={toggleFavoritePokemon}
+            />
           )}
         </Mutation>
       );
