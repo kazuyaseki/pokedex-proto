@@ -49,7 +49,6 @@ const Wholesome = enhanceTypeFilter(({ filterType, setFilterType }) => (
       return (
         <div>
           <Header>
-            <WithStateSearchBox />
             {data.types.map(type => (
               <TypeLabel
                 type={type.cname}
