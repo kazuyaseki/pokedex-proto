@@ -42,7 +42,7 @@ const enhanceFavedPokemonIds = withState(
 
 const Wholesome = enhanceTypeFilter(({ filterType, setFilterType }) => (
   <Query query={query} variables={{ offset: 0, limit: 10, filterType }}>
-    {({ loading, data }) => {
+    {({ loading, data, fetchMore }) => {
       if (loading) return <LoadingScreen />;
 
       return (
@@ -57,7 +57,23 @@ const Wholesome = enhanceTypeFilter(({ filterType, setFilterType }) => (
             ))}
           </Header>
           <EnhancedPokemonList pokemons={data.pokemons} />
-          <SeeMoreButton>もっと見る</SeeMoreButton>
+          <SeeMoreButton
+            onClick={() =>
+              fetchMore({
+                variables: {
+                  offset: data.pokemons.length
+                },
+                updateQuery: (prev, { fetchMoreResult }) => {
+                  if (!fetchMoreResult) return prev;
+                  return Object.assign({}, prev, {
+                    pokemons: [...prev.pokemons, ...fetchMoreResult.pokemons]
+                  });
+                }
+              })
+            }
+          >
+            もっと見る
+          </SeeMoreButton>
         </div>
       );
     }}
