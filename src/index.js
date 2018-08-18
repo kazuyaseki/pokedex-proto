@@ -37,7 +37,7 @@ const client = new ApolloClient({
   uri: 'http://localhost:4000',
   clientState: {
     defaults: {
-      favedPokemonIds: []
+      favedPokemonIds: ['456', '234']
     },
     resolvers: {
       Mutation: {

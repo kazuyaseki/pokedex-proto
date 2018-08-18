@@ -9,6 +9,7 @@ import PokemonDetailPage from './components/PokemonDetailPage';
 import LoadingScreen from './components/LoadingScreen';
 import TypeLabel from './components/TypeLabel';
 import PokemonList from './components/PokemonList';
+import FavedPokemons from './components/FavedPokemons';
 
 const query = gql`
   query pokemons($offset: Int, $limit: Int, $filterType: String) {
@@ -85,6 +86,7 @@ const App = () => (
     <div>
       <Route exact path="/" component={Wholesome} />
       <Route path="/detail/:id" component={PokemonDetailPage} />
+      <Route path="/favorites" component={FavedPokemons} />
     </div>
   </BrowserRouter>
 );
