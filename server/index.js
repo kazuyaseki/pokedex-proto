@@ -65,7 +65,7 @@ const typeDefs = gql`
   }
 
   type Query {
-    pokemons(cursor: Int, filterType: String): [Pokemon]
+    pokemons(offset: Int, limit: Int, filterType: String): [Pokemon]
     pokemon(id: ID): Pokemon
     types: [Type]
   }
@@ -76,13 +76,12 @@ const COUNT_PER_PAGE = 10;
 const resolvers = {
   Query: {
     pokemons(_, args) {
-      if (args.filterType) {
-        return pokemons.filter(pokemon =>
-          pokemon.type.includes(args.filterType)
-        );
+      const { filterType, offset, limit } = args;
+      if (filterType) {
+        return pokemons.filter(pokemon => pokemon.type.includes(filterType));
       }
-      if (Number.isInteger(args.cursor)) {
-        return pokemons.slice(args.cursor, args.cursor + COUNT_PER_PAGE);
+      if (Number.isInteger(offset) && limit) {
+        return pokemons.slice(offset, offset + limit);
       }
 
       return pokemons;

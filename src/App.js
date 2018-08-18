@@ -11,8 +11,8 @@ import TypeLabel from './components/TypeLabel';
 import PokemonCard from './components/PokemonCard';
 
 const query = gql`
-  query pokemons($cursor: Int, $filterType: String) {
-    pokemons(cursor: $cursor, filterType: $filterType) {
+  query pokemons($offset: Int, $limit: Int, $filterType: String) {
+    pokemons(offset: $offset, limit: $limit, filterType: $filterType) {
       id
       jname
       ename
@@ -41,7 +41,7 @@ const enhanceFavedPokemonIds = withState(
 );
 
 const Wholesome = enhanceTypeFilter(({ filterType, setFilterType }) => (
-  <Query query={query} variables={{ cursor: 0, filterType }}>
+  <Query query={query} variables={{ offset: 0, limit: 10, filterType }}>
     {({ loading, data }) => {
       if (loading) return <LoadingScreen />;
 
