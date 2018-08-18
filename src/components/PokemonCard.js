@@ -54,8 +54,12 @@ const FavButtonWrapper = styled.div`
   right: -3px;
 `;
 
+const StyledLink = styled(Link)`
+  text-decoration: none;
+`;
+
 const PokemonCard = ({ pokemon, isFaved, handleFavorite }) => (
-  <Link to={`/detail/${pokemon.id}`}>
+  <StyledLink to={`/detail/${pokemon.id}`}>
     <Card>
       <IdLabel>{pokemon.id}</IdLabel>
       <FavButtonWrapper>
@@ -74,6 +78,6 @@ const PokemonCard = ({ pokemon, isFaved, handleFavorite }) => (
         </div>
       </Detail>
     </Card>
-  </Link>
+  </StyledLink>
 );
 export default PokemonCard;
