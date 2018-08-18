@@ -56,7 +56,8 @@ const Wholesome = enhanceTypeFilter(({ filterType, setFilterType }) => (
               />
             ))}
           </Header>
-          <DummyPokemonList pokemons={data.pokemons} />
+          <EnhancedPokemonList pokemons={data.pokemons} />
+          <SeeMoreButton>もっと見る</SeeMoreButton>
         </div>
       );
     }}
@@ -71,6 +72,13 @@ const App = () => (
     </div>
   </BrowserRouter>
 );
+
+const SeeMoreButton = styled.button`
+  width: 160px;
+  padding: 5px 10px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+`;
 
 const Header = styled.header`
   width: 100vw;
@@ -129,7 +137,7 @@ const TOGGLE_FAV_POKEMON = gql`
   }
 `;
 
-const DummyPokemonList = ({ pokemons }) => (
+const EnhancedPokemonList = ({ pokemons }) => (
   <Query query={GET_FAVED_POKEMON_IDS}>
     {({ loading, data }) => {
       if (loading) return <p>Loading...</p>;
@@ -154,29 +162,6 @@ const DummyPokemonList = ({ pokemons }) => (
       );
     }}
   </Query>
-);
-
-const EnhancedPokemonList = enhanceFavedPokemonIds(
-  ({ favedPokemonIds, setFavedPokemonIds, pokemons }) => (
-    <PokemonList>
-      {pokemons.map(pokemon => (
-        <PokemonCard
-          pokemon={pokemon}
-          key={pokemon.id}
-          isFaved={favedPokemonIds.includes(pokemon.id)}
-          handleFavorite={id => {
-            setFavedPokemonIds(ids => {
-              if (!ids.includes(id)) {
-                return [...ids, id];
-              } else {
-                return ids.filter(_id => _id !== id);
-              }
-            });
-          }}
-        />
-      ))}
-    </PokemonList>
-  )
 );
 
 export default App;
